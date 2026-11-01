@@ -1,5 +1,7 @@
 # ClaimAudit · 验货员
 
+[![ci](https://github.com/ironmanstar-lab/claimaudit/actions/workflows/ci.yml/badge.svg)](https://github.com/ironmanstar-lab/claimaudit/actions/workflows/ci.yml)
+
 **宣称 vs 证据。** 给它一个「开源神器 / AI 教程 / 致富方法」的链接，它给你一份能复核的尽调报告：哪些话有证据、哪些只是气氛、30 分钟内你自己该怎么验。
 
 ```bash
