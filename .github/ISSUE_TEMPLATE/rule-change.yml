@@ -1,0 +1,64 @@
+name: 规则建议（改权重 / 加检查）
+description: 认为某个维度权重不合理，或想新增一条检查
+title: "[规则] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **这个仓库只接受“能让黄金集更准”的改动。**
+
+        规则改动必须带一个样本，否则无法判断是变好还是变样。
+        流程见 [CONTRIBUTING.md](https://github.com/ironmanstar-lab/claimaudit/blob/main/CONTRIBUTING.md)。
+
+  - type: dropdown
+    id: kind
+    attributes:
+      label: 改动类型
+      options:
+        - 调权重
+        - 调阈值 / 等级线
+        - 新增检查
+        - 新增封顶规则
+        - 修某个检查的判定逻辑
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: 现在会误判成什么样
+      description: 最好给一个真实（或高度拟真）的例子
+      placeholder: |
+        一个稳定的小工具，只发过 3 个版本，被「一次性发布」封顶到 B。
+        但它其实不需要频繁提交。
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 打算怎么改
+      placeholder: |
+        封顶条件从「commits ≤ 5」改为「commits ≤ 5 且 stars < 100」…
+    validations:
+      required: true
+
+  - type: textarea
+    id: sample
+    attributes:
+      label: 附带的黄金集样本
+      description: 贴 bench/golden/xxx.json 的 _expect 部分；或说明为什么现有样本已覆盖
+      placeholder: |
+        {
+          "_expect": {"grades": ["A"], "note": "小工具：提交少但版本稳定"}
+        }
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: 确认
+      options:
+        - label: 我跑过 `python bench/run.py`，并在 PR 里会附前后对比表
+          required: true

@@ -1,0 +1,57 @@
+name: 误判申诉（这里判错了）
+description: 某条检查引用了错误的事实，或对事实的解释明显不合理
+title: "[误判] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        先别急。这个工具**不判断真假**，只汇总证据；它给你低分，不代表你的项目有问题。
+
+        提之前请先做两件事：
+        1. 跑一遍 `claimaudit <你的地址> --json`，看是哪条 `checks[].id` 给了低分；
+        2. 看一眼 [已知误判](https://github.com/ironmanstar-lab/claimaudit/blob/main/docs/已知误判.md)。
+
+        只要事实对、规则合理，低分就不是 bug。**我们要修的是“事实错”或“解释错”。**
+
+  - type: input
+    id: target
+    attributes:
+      label: 被审对象
+      placeholder: https://github.com/owner/repo
+    validations:
+      required: true
+
+  - type: input
+    id: check_id
+    attributes:
+      label: 哪条检查（checks[].id）
+      placeholder: 例如 recent_push / module_claims / license_claim
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: 它引用的事实错在哪
+      description: 直接贴 --json 里那条检查的 evidence 字段，再说实际情况
+      placeholder: |
+        evidence 写的是「最近一次提交 76 天前」，
+        但仓库昨天才推送过 —— 我猜是读错了分支。
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: 复现命令
+      placeholder: claimaudit https://github.com/owner/repo --json
+
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: 确认
+      options:
+        - label: 我看过 docs/rubric.md，理解这条检查的满分条件
+          required: true
+        - label: 我不是要求"把我的项目分数改高"，而是指出事实或逻辑错误
+          required: true

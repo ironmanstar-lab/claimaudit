@@ -4,6 +4,8 @@
 
 **宣称 vs 证据。** 给它一个「开源神器 / AI 教程 / 致富方法」的链接，它给你一份能复核的尽调报告：哪些话有证据、哪些只是气氛、30 分钟内你自己该怎么验。
 
+> 📌 **它是证据工具，不是判决书。** 本工具汇总可核事实，不构成对任何项目的定性评价，也不构成投资建议。分数是启发式的——不同意某条，改一行权重即可。
+
 ```bash
 claimaudit https://github.com/owner/repo
 ```
@@ -148,12 +150,35 @@ claimaudit/
   sources/       github / web / video / textfile 四个适配器
   claims.py      中文·英文卖点词表 + 行级上下文抽取
   rubric.py      18 条检查 + 三条封顶 + 拒答
-  report.py      Markdown / JSON 渲染
+  report.py      Markdown / JSON / HTML 三种渲染
   cli.py         命令行与退出码
 ```
 
-MIT. 拿去改，改了欢迎 PR。
+MIT. 拿去改，改了欢迎 PR —— 但**改权重/阈值请先读 [`CONTRIBUTING.md`](CONTRIBUTING.md)**：
+任何规则改动都必须附一个黄金集样本，否则不 merge。
+
+已知的误判写在 [`docs/已知误判.md`](docs/已知误判.md)，投稿前先看一眼，能省一半争论。
 
 ---
 
-**English**: ClaimAudit audits *claims*, not vibes. Point it at a repo, an article, or a video share link; it collects machine-checkable facts (commit cadence, file tree vs. advertised modules, LICENSE, tests, promo hooks), scores them against an 18-check rubric, and prints a claim-vs-evidence report plus a 30-minute verification checklist. Zero dependencies, deterministic output, and it refuses to grade when the evidence isn't there.
+## English
+
+**ClaimAudit audits claims, not vibes.** Point it at a GitHub repo, an article, or a video share link;
+it collects machine-checkable facts (commit cadence, file tree vs. advertised modules, LICENSE,
+tests, promo hooks), scores them against an 18-check rubric, and prints a claim-vs-evidence report
+plus a 30-minute verification checklist.
+
+```bash
+python -m claimaudit.cli https://github.com/owner/repo        # repo
+python -m claimaudit.cli https://example.com/sales-page --html --out r.html
+python -m claimaudit.cli <target> --json                      # stable schema for agents
+```
+
+* **Zero dependencies** — Python 3.9+, stdlib only, no API key, no network account.
+* **Deterministic** — same input, same score; every point traces to a concrete fact.
+* **Refuses to grade** when the evidence isn't there (e.g. a video with no transcript).
+* **Golden set included** (`bench/`) — 7 hand-labelled samples guard against regressions in CI.
+
+It is a *evidence* tool, not a verdict: it never claims a project is fake or good,
+only whether its claims are backed by checkable artifacts. MIT licensed.
+

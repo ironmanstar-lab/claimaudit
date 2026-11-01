@@ -7,7 +7,7 @@ import json
 from typing import Any, Dict, List, Optional
 
 from . import claims as claims_mod
-from .rubric import Audit
+from .rubric import DISCLAIMER, RUBRIC_VERSION, Audit
 
 CLAIM_KIND_TO_CHECK = {
     "money": "disclosure",
@@ -89,9 +89,16 @@ def render(audit: Audit, now: Optional[_dt.datetime] = None, top_claims: int = 8
         lines.append("> 首要红旗：%s" % audit.redflags[0])
     lines.append(">")
     lines.append(
-        "> 对象：%s · 来源：%s · 生成：%s · 方法：claimaudit 18 项检查（规则打分，可复现）"
-        % (audit.facts.get("url") or audit.target or "—", audit.source, _now(now))
+        "> 对象：%s · 来源：%s · 生成：%s · 方法：claimaudit 18 项检查 · rubric v%s（规则打分，可复现）"
+        % (
+            audit.facts.get("url") or audit.target or "—",
+            audit.source,
+            _now(now),
+            RUBRIC_VERSION,
+        )
     )
+    lines.append(">")
+    lines.append("> 📌 %s" % DISCLAIMER)
     lines.append("")
 
     # --- 1. scorecard -----------------------------------------------------
@@ -286,8 +293,13 @@ def render_html(audit: Audit, now: Optional[_dt.datetime] = None) -> str:
         parts.append('<div class="verdict" style="border-color:#ff8f5a">🚩 %s</div>' % _e(audit.redflags[0]))
 
     parts.append('<p style="color:#8b93a3;font-size:13px">对象：%s · 来源：%s · 生成：%s'
-                 ' · 方法：claimaudit 18 项检查（规则打分，可复现）</p>'
-                 % (_e(audit.facts.get("url") or audit.target), _e(audit.source), _e(_now(now))))
+                 ' · 方法：claimaudit 18 项检查 · rubric v%s（规则打分，可复现）</p>'
+                 % (_e(audit.facts.get("url") or audit.target), _e(audit.source), _e(_now(now)),
+                    _e(RUBRIC_VERSION)))
+    parts.append(
+        '<p style="margin:10px 0 0;padding:10px 12px;border-radius:8px;'
+        'background:#171b24;color:#9aa3b2;font-size:13px">📌 %s</p>' % _e(DISCLAIMER)
+    )
 
     # 评分卡
     parts.append("<h2>一、评分卡</h2><table><thead><tr><th>维度</th><th>得分</th><th>占比</th><th>可视化</th></tr></thead><tbody>")

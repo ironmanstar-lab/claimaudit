@@ -28,6 +28,15 @@ DIMENSIONS = [
     ("上手成本", 10.0),
 ]
 
+# 规则版本：任何权重/阈值/封顶的改动都要动这个号。
+# 报告里会打印它，读者才能判断「两份报告可不可比」。
+RUBRIC_VERSION = "0.2"
+
+DISCLAIMER = (
+    "本报告只是证据汇总，不构成对任何项目的定性评价，也不构成投资建议；"
+    "分数是启发式的，不能代替你自己跑一遍。"
+)
+
 GRADES = [
     (85.0, "S", "可以当依赖用：宣称与证据基本对齐，缺的部分也标了出来"),
     (70.0, "A", "值得投入时间：有真东西，按报告里的缺口补齐再信任"),
@@ -96,6 +105,8 @@ class Audit:
         return {
             "target": self.target,
             "source": self.source,
+            "rubric_version": RUBRIC_VERSION,
+            "disclaimer": DISCLAIMER,
             "score": round(self.score, 1),
             "grade": self.grade,
             "verdict": self.verdict,

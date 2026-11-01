@@ -71,6 +71,16 @@ class ReportTests(unittest.TestCase):
         self.assertNotIn("<img src=x", html)
         self.assertNotIn("<script>alert(1)</script>", html)
 
+    def test_disclaimer_is_always_present(self):
+        for audit in (audit_of(hype_facts()), audit_of(solid_facts())):
+            md = report.render(audit)
+            page = report.render_html(audit)
+            data = json.loads(report.render_json(audit))
+            self.assertIn("不构成对任何项目的定性评价", md)
+            self.assertIn("不构成对任何项目的定性评价", page)
+            self.assertIn("disclaimer", data)
+            self.assertEqual(data["rubric_version"], rubric.RUBRIC_VERSION)
+
 
 class CliTests(unittest.TestCase):
     def test_offline_fixture_runs(self):

@@ -1,0 +1,58 @@
+name: 新数据源 / 新平台
+description: 想让工具支持 Gitee、GitLab、小红书、公众号、某个文档站…
+title: "[源] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        适配器的契约很简单：实现一个 `probe()`，返回
+
+        ```python
+        {"source": "...", "target": "...", "url": "...", "notes": [...], "facts": {...}}
+        ```
+
+        然后不用碰 `rubric.py` —— 它只读 `facts` 里存在的字段，缺的检查会自动跳过。
+
+  - type: input
+    id: platform
+    attributes:
+      label: 平台 / 站点
+      placeholder: gitee.com / gitlab.com / 某个文档站
+    validations:
+      required: true
+
+  - type: textarea
+    id: facts
+    attributes:
+      label: 这个源能提供哪些事实
+      description: 对照 sources/github.py 的 facts 结构说明，哪些能拿到、哪些拿不到
+      placeholder: |
+        能拿到：star / 提交数 / 文件树 / LICENSE / README
+        拿不到：贡献者列表（API 不公开）
+    validations:
+      required: true
+
+  - type: dropdown
+    id: auth
+    attributes:
+      label: 需要认证吗
+      options:
+        - 完全公开，匿名可读
+        - 需要 token（会走 CLAIMAUDIT_TOKEN）
+        - 需要登录，抓不到
+    validations:
+      required: true
+
+  - type: textarea
+    id: sample
+    attributes:
+      label: 一个示例地址
+      placeholder: https://gitee.com/owner/repo
+
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: 确认
+      options:
+        - label: 我理解「抓不到就写未取到」，不会为了让报告好看而编造字段
+          required: true

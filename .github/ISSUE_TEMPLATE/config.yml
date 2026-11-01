@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 先读「已知误判」清单
+    url: https://github.com/ironmanstar-lab/claimaudit/blob/main/docs/%E5%B7%B2%E7%9F%A5%E8%AF%AF%E5%88%A4.md
+    about: 反讽读不懂、JS 页面、视频无字幕……一半的争论这里已经有答案
+  - name: 改规则之前先读贡献指南
+    url: https://github.com/ironmanstar-lab/claimaudit/blob/main/CONTRIBUTING.md
+    about: 任何权重/阈值改动都必须附一个黄金集样本，否则不 merge
+  - name: 评分细则
+    url: https://github.com/ironmanstar-lab/claimaudit/blob/main/docs/rubric.md
+    about: 18 项检查的满分条件、三条封顶、拒答规则
