@@ -1,0 +1,39 @@
+name: ci
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9", "3.11", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Unit tests (offline)
+        run: python -m unittest discover -s tests -t . -v
+
+      - name: CLI smoke — low-score fixture renders
+        run: python -m claimaudit.cli --offline claimaudit/fixtures/hype_case.json --out /tmp/hype.md
+
+      - name: CLI smoke — high-score fixture renders
+        run: python -m claimaudit.cli --offline claimaudit/fixtures/solid_case.json --out /tmp/solid.md
+
+      - name: Gate must fail below threshold
+        run: |
+          if python -m claimaudit.cli --offline claimaudit/fixtures/hype_case.json --fail-under 99; then
+            echo "expected exit code 4"; exit 1
+          else
+            test $? -eq 4
+          fi
+
+      - name: Help is reachable
+        run: python -m claimaudit.cli --help | head -5
