@@ -1,0 +1,67 @@
+{
+  "source": "github",
+  "target": "demo/hype-quant",
+  "url": "https://github.com/demo/hype-quant",
+  "notes": ["演示快照：用于展示低分长什么样，与任何真实仓库无关"],
+  "facts": {
+    "full_name": "demo/hype-quant",
+    "description": "AI 量化神器：一键接管你的账户，月入 3 万不是梦（演示数据）",
+    "url": "https://github.com/demo/hype-quant",
+    "stars": 4820,
+    "forks": 610,
+    "watchers": 88,
+    "open_issues": 214,
+    "created_at": "2026-10-12T02:10:00Z",
+    "pushed_at": "2026-10-20T09:00:00Z",
+    "updated_at": "2026-10-31T11:00:00Z",
+    "size_kb": 96000,
+    "language": "Python",
+    "license": null,
+    "topics": ["quant", "ai", "trading"],
+    "archived": false,
+    "default_branch": "main",
+    "commits": 6,
+    "contributors": 1,
+    "readme": {
+      "path": "README.md",
+      "chars": 840,
+      "headings": ["AI 量化神器", "功能", "安装"],
+      "text": "# AI 量化神器\n\n全网首发，唯一能做到全自动的 A 股量化系统。100% 无人值守，零风险躺赚。\n\n## 功能\n\n- 120+ 因子、8 大模块，一键部署\n- 月入 3 万的真实案例（学员反馈）\n- 3 分钟上手，零基础也能跑\n\n## 安装\n\n下载网盘里的 exe，双击即用。加群领取完整版，名额有限。\n"
+    },
+    "tree": {
+      "paths": [
+        "README.md",
+        "run.exe",
+        "dist/panel.exe",
+        "node_modules/left-pad/index.js",
+        "node_modules/left-pad/package.json",
+        "strategy/__init__.py",
+        "strategy/simple.py",
+        "web/index.html",
+        "web/app.js"
+      ],
+      "top_dirs": ["dist", "node_modules", "strategy", "web"],
+      "file_count": 9
+    },
+    "signals": {
+      "has_tests": false,
+      "test_files": 0,
+      "has_ci": false,
+      "has_license_file": false,
+      "committed_node_modules": true,
+      "node_modules_files": 2,
+      "binaries": ["run.exe", "dist/panel.exe"],
+      "binary_count": 2,
+      "dependency_files": ["requirements.txt"],
+      "dependency_count": 1,
+      "has_demo_data": false,
+      "docs_count": 0,
+      "code_files": 4,
+      "top_dirs": ["dist", "node_modules", "strategy", "web"],
+      "file_count": 9
+    },
+    "age_days": 20.0,
+    "days_since_push": 12.0,
+    "disclaimer": false
+  }
+}

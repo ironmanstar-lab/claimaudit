@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "claimaudit"
+version = "0.1.0"
+description = "宣称 vs 证据：给「开源神器 / AI 教程 / 致富方法」做尽调的命令行 agent"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "ClaimAudit contributors" }]
+keywords = ["audit", "due-diligence", "agent", "llm", "fact-check", "github"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Environment :: Console",
+  "Intended Audience :: End Users/Desktop",
+  "Topic :: Software Development :: Quality Assurance",
+]
+dependencies = []
+
+[project.optional-dependencies]
+dev = []
+
+[project.scripts]
+claimaudit = "claimaudit.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/ironmanstar-lab/claimaudit"
+
+[tool.setuptools.packages.find]
+include = ["claimaudit*"]
+
+[tool.setuptools.package-data]
+claimaudit = ["fixtures/*.json"]

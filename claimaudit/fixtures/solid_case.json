@@ -1,0 +1,72 @@
+{
+  "source": "github",
+  "target": "demo/solid-tool",
+  "url": "https://github.com/demo/solid-tool",
+  "notes": ["演示快照：用于展示高分长什么样，与任何真实仓库无关"],
+  "facts": {
+    "full_name": "demo/solid-tool",
+    "description": "A small, tested CLI for diffing spreadsheet schemas (demo data)",
+    "url": "https://github.com/demo/solid-tool",
+    "stars": 2140,
+    "forks": 180,
+    "watchers": 40,
+    "open_issues": 12,
+    "created_at": "2025-03-02T08:00:00Z",
+    "pushed_at": "2026-10-28T10:00:00Z",
+    "updated_at": "2026-10-30T10:00:00Z",
+    "size_kb": 820,
+    "language": "Python",
+    "license": "MIT",
+    "topics": ["cli", "schema", "testing"],
+    "archived": false,
+    "default_branch": "main",
+    "commits": 412,
+    "contributors": 14,
+    "readme": {
+      "path": "README.md",
+      "chars": 5200,
+      "headings": ["Install", "Quickstart", "CLI", "Architecture", "Testing"],
+      "text": "# solid-tool\n\nSmall CLI for diffing spreadsheet schemas. MIT licensed, stdlib only.\n\n## Install\n\npip install solid-tool\n\n## Quickstart\n\nsolid-tool diff a.xlsx b.xlsx\n\n## CLI\n\nSee `docs/cli.md` for the full flag list. Output is JSON by default.\n\n## Architecture\n\n`src/differ.py` does the comparison, `src/report.py` renders it.\n\n## Testing\n\npytest -q, 41 tests, CI on 3.10/3.11/3.12. Benchmark on a 50k-row sheet:\n2.1s (see benchmarks/).\n\n## Method\n\nThe comparison is a set diff over normalised column signatures; we publish\nsample datasets under demo/ so results are reproducible.\n"
+    },
+    "tree": {
+      "paths": [
+        "README.md",
+        "LICENSE",
+        "docs/cli.md",
+        "docs/architecture.md",
+        "docs/testing.md",
+        "src/differ.py",
+        "src/report.py",
+        "tests/test_differ.py",
+        "tests/test_report.py",
+        "benchmarks/bench.py",
+        "demo/a.xlsx",
+        ".github/workflows/ci.yml",
+        "requirements.txt",
+        "pyproject.toml"
+      ],
+      "top_dirs": ["benchmarks", "demo", "docs", "src", "tests"],
+      "file_count": 14
+    },
+    "signals": {
+      "has_tests": true,
+      "test_files": 2,
+      "has_ci": true,
+      "has_license_file": true,
+      "committed_node_modules": false,
+      "node_modules_files": 0,
+      "binaries": [],
+      "binary_count": 0,
+      "dependency_files": ["requirements.txt", "pyproject.toml"],
+      "dependency_count": 2,
+      "has_demo_data": true,
+      "docs_count": 4,
+      "code_files": 2,
+      "top_dirs": ["benchmarks", "demo", "docs", "src", "tests"],
+      "file_count": 14
+    },
+    "age_days": 610.0,
+    "days_since_push": 4.0,
+    "disclaimer": false
+  }
+}
