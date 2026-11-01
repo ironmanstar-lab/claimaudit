@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "claimaudit"
-version = "0.1.0"
+version = "0.2.0"
 description = "宣称 vs 证据：给「开源神器 / AI 教程 / 致富方法」做尽调的命令行 agent"
 readme = "README.md"
 requires-python = ">=3.9"

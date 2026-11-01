@@ -1,0 +1,20 @@
+{
+  "_expect": {"grades": ["—"], "note": "只有视频链接、没有字幕：必须拒答，不许给分数"},
+  "source": "video",
+  "target": "https://v.douyin.com/demo123/",
+  "url": "https://v.douyin.com/demo123/",
+  "notes": ["视频类目标只能核到元数据"],
+  "facts": {
+    "platform": "douyin",
+    "video_id": "demo123",
+    "title": "开源！实现散户量化自由",
+    "author": "某创作者",
+    "transcript": "",
+    "chars": 0,
+    "headings": [],
+    "links": [],
+    "promo_hits": [],
+    "numbers": [],
+    "transcript_required": true
+  }
+}

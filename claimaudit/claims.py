@@ -13,7 +13,7 @@ from typing import Dict, Iterable, List
 
 # (kind, severity, pattern, how_to_check)
 RULES = [
-    ("money", 3, r"(月入|年化|收益率?|翻倍|躺赚|稳赚|暴富|回本|passive income|roi\s*[:：]?\s*\d)", "要净值曲线、样本期、最大回撤，以及是否实盘"),
+    ("money", 3, r"(月入|年化|收益率|翻倍|躺赚|稳赚|暴富|回本|passive income|roi\s*[:：]?\s*\d)", "要净值曲线、样本期、最大回撤，以及是否实盘"),
     ("absolute", 3, r"(唯一.{0,8}(能|可|方法|选择|方案|一款|一家|路径)|最强|第一|顶级|零风险|无风险|必赚|必胜|100\s*%|guarantee[ds]?|world[- ]class|only\s+one)", "绝对化表述本身不可证伪，要求给出对照基线与失败案例"),
     ("quantity", 1, r"(\d{2,}\s*\+?\s*(个|条|种|项|位)?\s*(因子|指标|插件|技能|模块|功能|模型|策略|案例|模板))", "数一遍仓库/页面里的实际条目，看是否含占位与重复"),
     ("effortless", 2, r"(一键|全自动|零基础|无脑|开箱即用|秒级上手|one[- ]click|out[- ]of[- ]the[- ]box|no[- ]code)", "看依赖数量、安装步骤、是否需要付费 key 或买数据"),
@@ -82,6 +82,24 @@ def _sentence_around(text: str, start: int, end: int, width: int = 28) -> str:
     return snippet
 
 
+META_MARKERS = ("例如", "比如", "示例", "检测", "识别", "钩子", "红线", "判据", "不能做")
+
+
+def _is_meta_line(text: str, start: int, end: int) -> bool:
+    """规则说明/举例/检测项里的词，不算它自己的宣称。
+
+    README 里写「（加群/网盘/私域/名额）→ 0 分」是在描述检测规则，
+    不是在做私域引流；同理「月入」出现在词表里也不构成收益承诺。
+    """
+    line_start = text.rfind("\n", 0, start) + 1
+    line_end = text.find("\n", end)
+    line = text[line_start: line_end if line_end != -1 else len(text)]
+    if any(marker in line for marker in META_MARKERS):
+        return True
+    # 「… → 最高 C」这种是评分规则本身，不是宣称
+    return "→" in line and ("最高" in line or "封顶" in line)
+
+
 def _looks_like_headline(line: str) -> bool:
     """短、无标点、带感叹号 — 通常是标题/导航条目，不是正文宣称。"""
     if not line:
@@ -130,6 +148,8 @@ def extract(text: str, limit: int = 40, per_kind: int = 4) -> List[Claim]:
             if taken >= per_kind:
                 break
             if _is_table_or_code(text, match.start(), match.end()):
+                continue
+            if _is_meta_line(text, match.start(), match.end()):
                 continue
             snippet = _line_around(text, match.start(), match.end()) or _sentence_around(
                 text, match.start(), match.end()

@@ -1,0 +1,48 @@
+{
+  "_expect": {"grades": ["B"], "note": "文档漂亮但一次性发布：封顶必须生效（commits ≤5 且建库 >30 天）"},
+  "source": "github",
+  "target": "demo/dump-quant",
+  "url": "https://github.com/demo/dump-quant",
+  "notes": [],
+  "facts": {
+    "full_name": "demo/dump-quant",
+    "description": "A股低频量化决策系统（演示样本，结构取自真实项目）",
+    "url": "https://github.com/demo/dump-quant",
+    "stars": 305,
+    "forks": 104,
+    "open_issues": 8,
+    "created_at": "@-80d",
+    "pushed_at": "@-76d",
+    "updated_at": "@-2d",
+    "size_kb": 3100,
+    "language": "Python",
+    "license": "NOASSERTION",
+    "topics": ["quant", "a-share"],
+    "archived": false,
+    "default_branch": "master",
+    "commits": 3,
+    "contributors": 1,
+    "readme": {
+      "chars": 4200,
+      "headings": ["开始", "架构", "因子", "安装与运行", "数据"],
+      "text": "# DeepQuant\n\n自然语言驱动的 A 股量化系统。低频。主观决策 + 写死引擎 + 数据裁决。\n\n## 开始\n\n新用户直接走 [一键部署](docs/deploy.md)。接入 API 后，数据源、配置、验证全交给向导。\n\n## 架构\n\n| 模块 | 职责 |\n|---|---|\n| data/ | 数据获取 + 本地缓存 + Point-in-Time |\n| factors/ | 因子引擎 + 机会扫描 |\n| strategy/ | 决策链 + 组合构建 |\n| risk/ | 风控七道 |\n| backtest/ | 回测引擎（T+1 / 一字板过滤 / 成本模型）|\n| deck/ | Web 决策台 |\n| harness/ | 运行时 |\n\n## 因子\n\n123+ 因子，全部本地实证（PIT / T+1 / 分年度）。九步入池，17+ 项证伪留档。\n\n## 安装与运行\n\npip install -r requirements.txt\npython launcher.py\n\n## 数据\n\n数据由用户自行获取（Tushare 等），仓库只含获取脚本 + 合成演示数据。\n换手率 2019 年前缺失，2019 前换手类结论作废。\n"
+    },
+    "tree": {
+      "paths": [
+        "README.md", "LICENSE", "requirements.txt", "launcher.py",
+        "data/cache.py", "factors/engine.py", "factors/scan.py",
+        "strategy/chain.py", "risk/gate.py", "backtest/bt_runner.py",
+        "deck/server.py", "docs/deploy.md", "docs/data.md", "tests/test_scan.py"
+      ],
+      "top_dirs": ["data", "factors", "strategy", "risk", "backtest", "deck", "docs", "tests"],
+      "file_count": 14
+    },
+    "signals": {
+      "has_tests": true, "test_files": 1, "has_ci": false, "has_license_file": true,
+      "committed_node_modules": false, "binaries": [], "binary_count": 0,
+      "dependency_files": ["requirements.txt"], "dependency_count": 1,
+      "has_demo_data": true, "docs_count": 3, "code_files": 6, "file_count": 14,
+      "top_dirs": ["data", "factors", "strategy", "risk", "backtest", "deck", "docs", "tests"]
+    }
+  }
+}

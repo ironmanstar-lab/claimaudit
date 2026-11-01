@@ -1,0 +1,49 @@
+{
+  "_expect": {"grades": ["S", "A"], "note": "成熟库：测试、CI、文档、维护都在，不该被扣分"},
+  "source": "github",
+  "target": "demo/tablekit",
+  "url": "https://github.com/demo/tablekit",
+  "notes": [],
+  "facts": {
+    "full_name": "demo/tablekit",
+    "description": "Small, tested toolkit for diffing and normalising CSV/TSV files (demo data)",
+    "url": "https://github.com/demo/tablekit",
+    "stars": 4200,
+    "forks": 380,
+    "open_issues": 15,
+    "created_at": "@-900d",
+    "pushed_at": "@-3d",
+    "updated_at": "@-1d",
+    "size_kb": 2400,
+    "language": "Python",
+    "license": "MIT",
+    "topics": ["csv", "cli", "testing"],
+    "archived": false,
+    "default_branch": "main",
+    "commits": 1240,
+    "contributors": 46,
+    "readme": {
+      "chars": 6800,
+      "headings": ["Install", "Quickstart", "CLI", "How it works", "Testing", "Benchmarks"],
+      "text": "# tablekit\n\nDiff and normalise CSV/TSV files. MIT, stdlib only.\n\n## Install\n\npip install tablekit\n\n## Quickstart\n\ntablekit diff a.csv b.csv --json\n\n## CLI\n\nFull flag list in `docs/cli.md`. Output defaults to JSON.\n\n## How it works\n\nThe comparison is a set diff over normalised column signatures. Sample datasets\nlive in `demo/` so every result in this README can be reproduced offline.\n\n## Testing\n\npytest -q: 118 tests, CI on 3.10 / 3.11 / 3.12. Coverage is reported per PR.\n\n## Benchmarks\n\nOn a 50k-row sheet the diff takes 2.1s (see `benchmarks/`). The previous\nrelease took 4.8s; the changelog records both numbers and the method.\n\n## Docs\n\n- https://example.com/design-notes\n- https://arxiv.org/abs/2403.00001\n- https://example.com/schema-spec\n"
+    },
+    "tree": {
+      "paths": [
+        "README.md", "LICENSE", "pyproject.toml", "requirements.txt",
+        "src/diff.py", "src/normalise.py", "src/report.py",
+        "tests/test_diff.py", "tests/test_normalise.py", "tests/test_report.py",
+        "docs/cli.md", "docs/design.md", "docs/faq.md", "benchmarks/run.py",
+        "demo/a.csv", "demo/b.csv", ".github/workflows/ci.yml"
+      ],
+      "top_dirs": ["benchmarks", "demo", "docs", "src", "tests"],
+      "file_count": 17
+    },
+    "signals": {
+      "has_tests": true, "test_files": 3, "has_ci": true, "has_license_file": true,
+      "committed_node_modules": false, "binaries": [], "binary_count": 0,
+      "dependency_files": ["pyproject.toml", "requirements.txt"], "dependency_count": 2,
+      "has_demo_data": true, "docs_count": 5, "code_files": 3, "file_count": 17,
+      "top_dirs": ["benchmarks", "demo", "docs", "src", "tests"]
+    }
+  }
+}

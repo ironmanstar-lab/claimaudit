@@ -1,0 +1,22 @@
+{
+  "_expect": {"grades": ["A", "B"], "note": "有出处、有数字、无引流的报道：内容类最高 A，但至少该到 B"},
+  "source": "web",
+  "target": "一篇有出处的技术报道",
+  "url": "https://example.com/news/2026/agent-harness",
+  "notes": [],
+  "facts": {
+    "title": "某开源 Agent 框架发布 0.3：插件化改造与实测数据",
+    "description": "报道：0.3 版本把沙箱拆成插件，启动时间从 1.8s 降到 0.6s",
+    "chars": 3200,
+    "headings": ["发布了什么", "实测", "社区反应"],
+    "text": "该框架 0.3 版本把沙箱与模型适配器拆成独立插件，官方给出的样本是 24 个真实会话：平均启动时间从 1.8s 降到 0.6s，内存占用下降 38%。\n测试方法写在了仓库的 benchmarks/ 目录里，接受第三方用同一批会话复现。\n社区里有人提出质疑：样本只有 24 个会话，且都来自同一台机器。维护者在 issue #412 里承认了这个局限，并说明下个版本会补多机测试。\n对比上一版，插件安装失败的报错信息从一段 traceback 变成了一行可读提示，这一点在讨论区获得了较多认可。\n仓库地址与完整基准数据见文末链接。\n",
+    "links": [
+      "https://github.com/example/harness",
+      "https://example.com/benchmarks",
+      "https://github.com/example/harness/issues/412",
+      "https://example.com/release-notes"
+    ],
+    "promo_hits": [],
+    "numbers": ["0.3", "1.8s", "0.6s", "38%", "24 个", "412"]
+  }
+}

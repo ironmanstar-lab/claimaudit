@@ -1,0 +1,47 @@
+{
+  "_expect": {"grades": ["C"], "note": "工程做得再好，说开源却没 LICENSE 也必须封顶到 C"},
+  "source": "github",
+  "target": "demo/no-license",
+  "url": "https://github.com/demo/no-license",
+  "notes": [],
+  "facts": {
+    "full_name": "demo/no-license",
+    "description": "Feature-rich workflow engine (demo: everything good except the LICENSE)",
+    "url": "https://github.com/demo/no-license",
+    "stars": 980,
+    "forks": 90,
+    "open_issues": 9,
+    "created_at": "@-300d",
+    "pushed_at": "@-10d",
+    "updated_at": "@-2d",
+    "size_kb": 900,
+    "language": "Python",
+    "license": null,
+    "topics": ["workflow"],
+    "archived": false,
+    "default_branch": "main",
+    "commits": 210,
+    "contributors": 7,
+    "readme": {
+      "chars": 2400,
+      "headings": ["Install", "Features", "Testing"],
+      "text": "# flowkit\n\n完全免费开源的工作流引擎，零基础也能用。\n\n## Install\n\npip install flowkit\n\n## Features\n\n- 15 种节点，开箱即用\n- 一键部署到任意云\n\n## Testing\n\npytest -q: 64 tests, CI on Linux and macOS. Benchmarks are in `bench/`.\n"
+    },
+    "tree": {
+      "paths": [
+        "README.md", "pyproject.toml", "src/engine.py", "src/nodes.py",
+        "tests/test_engine.py", "tests/test_nodes.py", "docs/guide.md",
+        "docs/api.md", "bench/run.py", ".github/workflows/ci.yml"
+      ],
+      "top_dirs": ["src", "tests", "docs", "bench"],
+      "file_count": 10
+    },
+    "signals": {
+      "has_tests": true, "test_files": 2, "has_ci": true, "has_license_file": false,
+      "committed_node_modules": false, "binaries": [], "binary_count": 0,
+      "dependency_files": ["pyproject.toml"], "dependency_count": 1,
+      "has_demo_data": false, "docs_count": 3, "code_files": 2, "file_count": 10,
+      "top_dirs": ["src", "tests", "docs", "bench"]
+    }
+  }
+}

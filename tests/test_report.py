@@ -54,6 +54,23 @@ class ReportTests(unittest.TestCase):
         text = report.render(audit_of(facts))
         self.assertIn("没有从文本里提取到明确宣称", text)
 
+    def test_html_is_self_contained(self):
+        html = report.render_html(audit_of(hype_facts()))
+        self.assertTrue(html.startswith("<!doctype html>"))
+        self.assertTrue(html.rstrip().endswith("</html>"))
+        self.assertIn("<style>", html)
+        self.assertIn("评分卡", html)
+        self.assertIn("宣称 vs 证据", html)
+        self.assertNotIn("<script", html)  # 不发外部/可执行内容
+
+    def test_html_escapes_user_content(self):
+        facts = solid_facts()
+        facts["description"] = "<script>alert(1)</script>"
+        facts["readme"]["text"] = "一键部署 <img src=x onerror=alert(1)>"
+        html = report.render_html(audit_of(facts))
+        self.assertNotIn("<img src=x", html)
+        self.assertNotIn("<script>alert(1)</script>", html)
+
 
 class CliTests(unittest.TestCase):
     def test_offline_fixture_runs(self):

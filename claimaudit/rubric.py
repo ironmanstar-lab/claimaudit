@@ -247,17 +247,28 @@ def _module_claims(ctx, now):
     text = _text(ctx)
     tokens = []
     for m in MODULE_TOKEN.finditer(text):
-        token = (m.group(1) or m.group(2) or "").strip().strip("/")
-        if not token or "/" in token:
+        raw = (m.group(1) or m.group(2) or "").strip().strip("/")
+        if not raw:
             continue
-        if not re.match(r"^[A-Za-z_][\w-]{3,30}$", token):
-            continue  # 文件名/版本号/中文标识，不是模块名
-        tokens.append(token)
-    tokens = [t for t in dict.fromkeys(tokens) if len(t) >= 4][:25]
+        if m.group(1):
+            # 反引号里只认路径式（`src/differ.py`），散装标识符（CLAIMAUDIT_TOKEN）不是模块
+            if "/" not in raw:
+                continue
+            seg = raw.split("/")[0]
+        else:
+            seg = raw
+        if not re.match(r"^[A-Za-z_][\w-]{2,20}$", seg):
+            continue
+        tokens.append(seg)
+    tokens = [t for t in dict.fromkeys(tokens) if len(t) >= 3][:25]
     if not tokens:
         return 0.5, "正文没有可核对的模块名", None, "要求列出目录结构，对照功能列表"
+    top_dirs = {d.lower() for d in ((facts.get("tree") or {}).get("top_dirs") or [])}
     joined = "\n".join(paths).lower()
-    hits = [t for t in tokens if t.lower() in joined]
+    hits = [
+        t for t in tokens
+        if t.lower() in top_dirs or (t.lower() + "/") in joined
+    ]
     pct = ratio(len(hits), len(tokens), empty=0.5)
     missing = [t for t in tokens if t not in hits][:4]
     evidence = "正文提到的 %d 个模块名中 %d 个能在文件树里找到" % (len(tokens), len(hits))
@@ -362,9 +373,14 @@ def _promo(ctx, now):
     facts = ctx["facts"]
     text = _text(ctx)
     hits = list(facts.get("promo_hits") or [])
-    for word in ("加群", "网盘", "私信", "知识星球", "训练营", "优惠", "名额"):
-        if word in text:
-            hits.append(word)
+    hook_words = ("加群", "网盘", "私信", "知识星球", "训练营", "优惠", "名额")
+    # 只在「不是规则说明/举例」的行里算钩子
+    for line in text.splitlines():
+        if claims_mod.META_MARKERS and any(m in line for m in claims_mod.META_MARKERS):
+            continue
+        for word in hook_words:
+            if word in line:
+                hits.append(word)
     hits = list(dict.fromkeys(hits))
     if not hits:
         return 1.0, "未见引流/付费钩子", None, None
@@ -543,8 +559,10 @@ def _insufficient(ctx) -> Tuple[bool, str]:
     facts = ctx["facts"]
     if facts.get("transcript_required"):
         return True, "视频没有字幕/文案：口播里的承诺一条都没法核"
-    if ctx.get("source") in ("web", "video", "text") and len(ctx.get("text") or "") < 200:
-        return True, "对象正文不足 200 字，打分没有意义"
+    # 「太薄」= 又短又没料。180 字的卖课文案照样能判，只要它宣称够多。
+    if ctx.get("source") in ("web", "video", "text"):
+        if len(ctx.get("text") or "") < 200 and len(ctx.get("claims") or []) < 3:
+            return True, "内容太薄（正文不足 200 字且几乎没有可判定的宣称），打分没有意义"
     return False, ""
 
 

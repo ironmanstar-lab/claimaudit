@@ -42,6 +42,7 @@ python -m claimaudit.cli https://github.com/owner/repo     # 仓库
 python -m claimaudit.cli https://example.com/sales-page    # 文章/落地页
 python -m claimaudit.cli https://v.douyin.com/xxxx/ --transcript 文案.txt   # 视频 + 字幕
 python -m claimaudit.cli README.md                         # 本地文案
+python -m claimaudit.cli <target> --html --out r.html      # 单文件 HTML，直接发人
 ```
 
 零依赖，Python 3.9+ 即可，不需要 API Key、不需要 Node、不需要装包。
@@ -91,6 +92,31 @@ claimaudit <target> --fail-under 70 # 分数不达标返回 4，可以卡 CI 依
 
 `--out report.md` 写 Markdown：评分卡、宣称 vs 证据表、红旗、证据缺口、30 分钟自检清单、原始事实。
 
+`--html`（或 `--out report.html`）出自包含单文件 HTML：样式内联、无脚本、无外链，可以直接发给不装 Python 的人看。
+
+## 怎么保证「改了是变好，不是变样」
+
+迭代这种规则系统，最大的敌人是「改完感觉更准了」。所以仓库里放了一个**黄金集**：
+
+```bash
+python bench/run.py
+```
+
+```
+样本                 等级     分数      期望       结果
+good_lib           S      89.1    S/A       PASS
+dump_repo          B      64.5    B         PASS
+abandoned          C      42.8    C/D       PASS
+no_license_claim   C      66.1    C         PASS
+article_good       A      77.9    A/B       PASS
+article_hype       D      35.9    C/D       PASS
+video_no_transcript —      42.9    —         PASS
+```
+
+七个样本各自带期望等级（`_expect`），`tests/test_bench.py` 把这套基准接进 CI：
+**谁把规则改坏了，CI 直接红。** 样本都是合成的，但事实结构取自真实见过的项目，
+校准的是规则之间的相对关系，不是给某个具体仓库打分。
+
 ## 边界（请先读这段）
 
 - **它不判断真假。** 它判断「有没有证据、证据够不够」。一个真项目也可能因为文档差拿低分。
@@ -99,10 +125,18 @@ claimaudit <target> --fail-under 70 # 分数不达标返回 4，可以卡 CI 依
 - **GitHub 匿名配额 60 次/小时。** 批量用请设 `CLAIMAUDIT_TOKEN`。
 - 视频没有公开字幕接口。想核口播，自己准备文案（`--transcript`）。
 
+**它明确不能做的四件事**（写在这里，免得你误会）：
+
+- **不判断真假**，只判断「有没有可核的证据、够不够」；
+- **不审代码逻辑**，只核对「宣称的结构」和「实际的结构」是否一致；
+- **不突破登录墙**，抓不到就写「未取到」，不会编；
+- **不替你做决定**，分数只是把讨论对齐到具体事实。
+
 ## 开发
 
 ```bash
-python -m unittest discover -s tests -t .   # 41 个用例，不联网
+python -m unittest discover -s tests -t .   # 44 个用例，不联网
+python bench/run.py                         # 黄金集：7 个样本对不对得上
 claimaudit --offline claimaudit/fixtures/hype_case.json   # 用快照看低分长什么样
 ```
 

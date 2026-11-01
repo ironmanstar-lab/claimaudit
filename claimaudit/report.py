@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import datetime as _dt
+import html
 import json
 from typing import Any, Dict, List, Optional
 
@@ -227,3 +228,122 @@ def _fact_rows(audit: Audit) -> Dict[str, Any]:
 
 def render_json(audit: Audit) -> str:
     return json.dumps(audit.as_dict(), ensure_ascii=False, indent=2)
+
+
+def _e(value) -> str:
+    return html.escape(str(value if value is not None else ""))
+
+
+HTML_CSS = """
+:root{color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;padding:56px 20px 96px;background:#0f1115;color:#e6e8ee;
+ font:15px/1.7 -apple-system,"Segoe UI","Microsoft YaHei",system-ui,sans-serif}
+main{max-width:920px;margin:0 auto}
+h1{font-size:26px;margin:0 0 14px;letter-spacing:.3px}
+h2{font-size:18px;margin:34px 0 12px;padding-bottom:8px;border-bottom:1px solid #262a33;color:#fff}
+.verdict{margin:6px 0 18px;padding:14px 16px;border-left:3px solid #4b8bff;
+ background:#151922;border-radius:0 8px 8px 0;color:#dfe6f5}
+.verdict b{color:#fff}
+.badge{display:inline-block;min-width:34px;text-align:center;padding:2px 8px;margin-right:8px;
+ border-radius:6px;background:#20242e;font-weight:700}
+.g-S{color:#56c88c}.g-A{color:#79c8ff}.g-B{color:#f0aa3c}.g-C{color:#ff8f5a}.g-D{color:#ff6b6b}.g-na{color:#8b93a3}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}
+th,td{border:1px solid #262a33;padding:7px 10px;text-align:left;vertical-align:top}
+th{background:#171b24;font-weight:600;color:#fff}
+td.num{text-align:right;font-variant-numeric:tabular-nums}
+.bar{font-family:ui-monospace,Consolas,monospace;color:#6ea8ff}
+.flag{padding:4px 0}
+ul{padding-left:22px}li{margin:5px 0}
+code{background:#1b2029;padding:1px 5px;border-radius:4px;font-family:ui-monospace,Consolas,monospace;font-size:13px}
+footer{margin-top:36px;padding-top:14px;border-top:1px solid #262a33;color:#8b93a3;font-size:13px}
+"""
+
+
+def render_html(audit: Audit, now: Optional[_dt.datetime] = None) -> str:
+    """自包含单文件 HTML —— 发给不装 Python 的人看。"""
+    by_id = {o.check_id: o for o in audit.outcomes}
+    grade = audit.grade
+    grade_cls = "g-" + (grade if grade in ("S", "A", "B", "C", "D") else "na")
+    parts = [
+        "<!doctype html>",
+        '<html lang="zh-CN"><head><meta charset="utf-8">',
+        '<meta name="viewport" content="width=device-width,initial-scale=1">',
+        "<title>验货报告 · %s</title>" % _e(audit.target),
+        "<style>%s</style></head><body><main>" % HTML_CSS,
+        "<h1>验货报告 · %s</h1>" % _e(audit.target),
+    ]
+
+    if audit.insufficient:
+        head = '<span class="badge %s">—</span>未定级 · %s' % (grade_cls, _e(audit.verdict))
+    else:
+        head = '<span class="badge %s">%s</span>%.1f / 100 · %s' % (
+            grade_cls, _e(grade), audit.score, _e(audit.verdict)
+        )
+    parts.append('<div class="verdict">%s</div>' % head)
+
+    if audit.redflags:
+        parts.append('<div class="verdict" style="border-color:#ff8f5a">🚩 %s</div>' % _e(audit.redflags[0]))
+
+    parts.append('<p style="color:#8b93a3;font-size:13px">对象：%s · 来源：%s · 生成：%s'
+                 ' · 方法：claimaudit 18 项检查（规则打分，可复现）</p>'
+                 % (_e(audit.facts.get("url") or audit.target), _e(audit.source), _e(_now(now))))
+
+    # 评分卡
+    parts.append("<h2>一、评分卡</h2><table><thead><tr><th>维度</th><th>得分</th><th>占比</th><th>可视化</th></tr></thead><tbody>")
+    for name, earned, possible in audit.dims:
+        if possible <= 0:
+            continue
+        pct = earned / possible
+        parts.append(
+            "<tr><td>%s</td><td class='num'>%.1f / %.0f</td><td class='num'>%.0f%%</td>"
+            "<td class='bar'>%s</td></tr>" % (_e(name), earned, possible, pct * 100, _bar(pct))
+        )
+    parts.append("</tbody></table>")
+
+    # 宣称 vs 证据
+    shown = _pick_claims(audit.claims, 8)
+    parts.append("<h2>二、宣称 vs 证据</h2>")
+    if not shown:
+        parts.append("<p>没有提取到明确宣称。</p>")
+    else:
+        parts.append("<table><thead><tr><th>#</th><th>它说</th><th>类型</th><th>我们核到</th><th>判定</th></tr></thead><tbody>")
+        for idx, claim in enumerate(shown, 1):
+            parts.append(
+                "<tr><td class='num'>%d</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>"
+                % (
+                    idx,
+                    _e(claim.text[:120]),
+                    _e(claims_mod.FIELD_LABELS.get(claim.kind, claim.kind)),
+                    _e(_evidence_for(claim, by_id, audit.source)[:120]),
+                    _e(_mark(_claim_pct(claim, by_id, audit.source))),
+                )
+            )
+        parts.append("</tbody></table>")
+
+    # 红旗 / 缺口 / 清单
+    parts.append("<h2>三、红旗</h2>")
+    if audit.redflags:
+        parts.append("".join('<div class="flag">🚩 %s</div>' % _e(f) for f in audit.redflags))
+    else:
+        parts.append("<div class='flag'>未命中任何红旗</div>")
+
+    parts.append("<h2>四、证据缺口</h2><ul>%s</ul>" % "".join("<li>%s</li>" % _e(g) for g in audit.gaps))
+
+    parts.append("<h2>五、30 分钟自检清单</h2>")
+    if audit.checklist:
+        parts.append("<ol>%s</ol>" % "".join("<li>%s</li>" % _e(i) for i in audit.checklist))
+    else:
+        parts.append("<p>没有额外要补的。</p>")
+
+    parts.append("<h2>六、采集到的事实</h2><table><tbody>")
+    for key, value in _fact_rows(audit).items():
+        parts.append("<tr><th>%s</th><td>%s</td></tr>" % (_e(key), _e(value)))
+    parts.append("</tbody></table>")
+
+    parts.append(
+        "<footer>打分是启发式的，用来对齐讨论，不是判决。"
+        "所有分数都能追到上面的事实与检查项；不同意某一条时，改 claimaudit/rubric.py 的权重即可。</footer>"
+    )
+    parts.append("</main></body></html>")
+    return "\n".join(parts)

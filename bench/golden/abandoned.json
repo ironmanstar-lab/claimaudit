@@ -1,0 +1,43 @@
+{
+  "_expect": {"grades": ["C", "D"], "max_score": 50, "note": "两年没更新、无测试、无 LICENSE，还在喊「最强」"},
+  "source": "github",
+  "target": "demo/ghost-tool",
+  "url": "https://github.com/demo/ghost-tool",
+  "notes": [],
+  "facts": {
+    "full_name": "demo/ghost-tool",
+    "description": "全网最强的自动化神器（演示样本）",
+    "url": "https://github.com/demo/ghost-tool",
+    "stars": 860,
+    "forks": 120,
+    "open_issues": 240,
+    "created_at": "@-1200d",
+    "pushed_at": "@-700d",
+    "updated_at": "@-300d",
+    "size_kb": 120,
+    "language": "Python",
+    "license": null,
+    "topics": [],
+    "archived": false,
+    "default_branch": "master",
+    "commits": 41,
+    "contributors": 1,
+    "readme": {
+      "chars": 480,
+      "headings": ["特性", "使用"],
+      "text": "# GhostTool\n\n全网最强，唯一能做到全自动的解决方案。100% 稳定，零维护。\n\n## 特性\n\n- 一键部署，零基础可用\n- 内置 30 种功能\n\n## 使用\n\n双击 run.py 即可。\n"
+    },
+    "tree": {
+      "paths": ["README.md", "run.py", "core.py", "utils.py"],
+      "top_dirs": [],
+      "file_count": 4
+    },
+    "signals": {
+      "has_tests": false, "test_files": 0, "has_ci": false, "has_license_file": false,
+      "committed_node_modules": false, "binaries": [], "binary_count": 0,
+      "dependency_files": [], "dependency_count": 0,
+      "has_demo_data": false, "docs_count": 0, "code_files": 3, "file_count": 4,
+      "top_dirs": []
+    }
+  }
+}

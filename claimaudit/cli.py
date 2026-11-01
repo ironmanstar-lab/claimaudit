@@ -31,6 +31,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("target", nargs="?", help="GitHub 仓库 URL / 网页 URL / 视频分享链接 / 本地文件")
     parser.add_argument("--transcript", metavar="PATH", help="视频或口播的文案（srt/txt/md），补上后才可能核实口播承诺")
     parser.add_argument("--json", action="store_true", help="输出机器可读的 JSON（给 agent 用）")
+    parser.add_argument("--html", action="store_true", help="输出自包含 HTML（发给不装 Python 的人看）")
     parser.add_argument("-o", "--out", metavar="PATH", help="把报告写到文件")
     parser.add_argument("--token", metavar="TOKEN", help="GitHub token（不传则读 CLAIMAUDIT_TOKEN，再退回匿名 60 次/小时）")
     parser.add_argument("--deep", action="store_true", help="多花 1-2 个请求，额外核对 Release 记录")
@@ -110,7 +111,12 @@ def run(argv=None) -> int:
     audit = rubric.score(ctx)
     audit.notes = list(audit.notes) + list(http.warnings)
 
-    body = report.render_json(audit) if args.json else report.render(audit)
+    if args.json:
+        body = report.render_json(audit)
+    elif args.html or (args.out or "").lower().endswith((".html", ".htm")):
+        body = report.render_html(audit)
+    else:
+        body = report.render(audit)
     if args.out:
         with open(args.out, "w", encoding="utf-8") as fh:
             fh.write(body + ("\n" if not body.endswith("\n") else ""))
